@@ -4,7 +4,6 @@ import Chart from 'chart.js/auto';
 
 function HomePage() {
     useEffect(() => {
-        // Your code for fetching data and creating the chart
         var dataSource = {
           datasets: [
             {
@@ -27,7 +26,7 @@ function HomePage() {
           var ctx = document.getElementById('myChart').getContext('2d');
           var existingChart = Chart.getChart(ctx);
            if (existingChart) {
-                         existingChart.destroy(); // Destroy the existing chart
+                         existingChart.destroy();
                       }
 
           var myPieChart = new Chart(ctx, {
@@ -43,7 +42,7 @@ function HomePage() {
                 dataSource.datasets[0].data[i] = res.data.myBudget[i].budget;
                 dataSource.labels[i] = res.data.myBudget[i].title;
               }
-              createChart(); // Call createChart after data is fetched
+              createChart();
             });
         }
     
