@@ -1,7 +1,56 @@
-import React from 'react';
-
+import React, { useEffect } from 'react';
+import axios from 'axios';
+import Chart from 'chart.js/auto';
 
 function HomePage() {
+    useEffect(() => {
+        // Your code for fetching data and creating the chart
+        var dataSource = {
+          datasets: [
+            {
+              data: [],
+              backgroundColor: [
+                '#ffcd56',
+                '#ff6384',
+                '#36a2ab',
+                '#fd6b19',
+                '#291801',
+                '#F633FF',
+                '#08DC38',
+              ],
+            },
+          ],
+          labels: [],
+        };
+    
+        function createChart() {
+          var ctx = document.getElementById('myChart').getContext('2d');
+          var existingChart = Chart.getChart(ctx);
+           if (existingChart) {
+                         existingChart.destroy(); // Destroy the existing chart
+                      }
+
+          var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: dataSource,
+          });
+        }
+    
+        function getBudget() {
+          axios.get('http://localhost:3001/budget')
+            .then(function (res) {
+              for (var i = 0; i < res.data.myBudget.length; i++) {
+                dataSource.datasets[0].data[i] = res.data.myBudget[i].budget;
+                dataSource.labels[i] = res.data.myBudget[i].title;
+              }
+              createChart(); // Call createChart after data is fetched
+            });
+        }
+    
+        getBudget();
+      }, []); 
+
+    
   return (
     <main className="center" id="main">
     <div className="page-area">
@@ -64,14 +113,15 @@ function HomePage() {
             </article>
     
             <article>
-                <h1>Chart</h1>
+            <h1>Chart</h1>
                 <p>
-                    <canvas id="myChart" width="400" height="400"></canvas>
+                    <canvas id="myChart"></canvas>
                 </p>
             </article>
 
         </div>
-        </main>
+    </main>
+       
   );
 }
 
